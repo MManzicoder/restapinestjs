@@ -1,5 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { Student } from './students.model';
-export class StudentsService{
+
+@Injectable()
+export default class StudentsService{
   students: Student[] = [];
   public getAll(): Student[]{
     return this.students;
