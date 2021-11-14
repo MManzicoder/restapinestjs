@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Student } from './students.model';
+import { Message } from '../util/message';
 
 @Injectable()
 export default class StudentsService{
@@ -8,12 +9,15 @@ export default class StudentsService{
     return this.students;
   }
   public addStudent(names: string, email: string): Student{
-    let id = Date.toString() + email.substr(0, 3);
+    let date = new Date();
+    let id = date.toISOString() + (this.students.length+1).toString();
     const student = new Student(id, names, email);
     this.students.push(student);
     return student;
   }
-  public editStudent(id: string,names: string, email: string): Student{
+  public editStudent(id: string, names: string, email: string): Student{
+    let targetProduct = this.students.find((st, i) => st.id.toString() === id.toString());
+    console.log(targetProduct);
     this.students.map(st => {
       if (st.id === id) {
         st.names = names;
@@ -22,8 +26,12 @@ export default class StudentsService{
     })
     return this.students.filter(st => st.id === id)[0];
   }
-  public deleteStudent(id: string): { message: string }{
+  public deleteStudent(id: string): {message: string, students: Student[]}{
     this.students = this.students.filter(std => std.id !== id);
-    return { message: "Deleted record successfully" };
+    let response = {
+      message: "Deleted record successfully",
+      students: this.students
+    }
+    return response;
   }
 }
