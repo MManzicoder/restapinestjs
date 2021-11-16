@@ -15,19 +15,17 @@ export default class StudentController{
   }
   @Post()
   public addStudent(@Body() userInfo){
-    // return this.addStudent(userInfo.names, userInfo.email);
     return this.studentsService.addStudent(userInfo);
   }
 
   @Put(":id")
   public updateStudent(@Param("id") id: string, @Body() userInfo: Student){
-    console.log(id);
-    
+    return this.studentsService.editStudent(id, userInfo.names, userInfo.email);
   }
 
   @Delete(":id")
   public deleteStudent(@Param("id") id: string){
-    
+    return this.studentsService.deleteStudent(id);
   }
   
 }

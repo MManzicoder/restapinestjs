@@ -17,17 +17,18 @@ export default class StudentsService{
       names: userInfo.names,
       email: userInfo.email
     })
-    // const  { _id, names, email, createdAt, updatedAt } = await newStudent.save();
     const result = await newStudent.save();
-    // const res = new StudentResponse(_id, names, email, createdAt, updatedAt);
     return result;
   }
-  public editStudent(id: string, names: string, email: string){
-    //editing user record
-    
+  async editStudent(id: string, names: string, email: string){
+    const student = await this.studentModel.findByIdAndUpdate(id, { names, email }, {new: true});
+    if (!student) return { error: "Student not found" };
+    return student;
   }
-  public deleteStudent(id: string){
-    //deleting user record
+  async deleteStudent(id: string){
+    const student = await this.studentModel.findByIdAndRemove(id);
+    if (!student) return { error: "Student with id " + id + " not found" };
+    return { message: "Deleted record successfully!" };
 
 }
 }
