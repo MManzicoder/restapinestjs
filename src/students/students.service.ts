@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose"
-import { Student, StudentDocument, StudentRequest } from './students.model';
+import { Student, StudentDocument, StudentResponse } from './students.model';
 import { Message } from '../util/message';
 import { Model } from 'mongoose';
-import { StudentResponse } from '../../dist/students/students.model';
+
 
 @Injectable()
 export default class StudentsService{
@@ -12,14 +12,15 @@ export default class StudentsService{
     let students = await this.studentModel.find().exec();
     return students;
   }
-  async addStudent(userInfo): StudentResponse{
+  async addStudent(userInfo){
     const newStudent = new this.studentModel({
       names: userInfo.names,
       email: userInfo.email
     })
-    const  { _id, names, email, createdAt, updatedAt } = await newStudent.save();
-    const res = new StudentResponse(_id, names, email, createdAt, updatedAt);
-    return res;
+    // const  { _id, names, email, createdAt, updatedAt } = await newStudent.save();
+    const result = await newStudent.save();
+    // const res = new StudentResponse(_id, names, email, createdAt, updatedAt);
+    return result;
   }
   public editStudent(id: string, names: string, email: string){
     //editing user record

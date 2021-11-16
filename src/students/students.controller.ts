@@ -16,7 +16,7 @@ export default class StudentController{
   @Post()
   public addStudent(@Body() userInfo){
     // return this.addStudent(userInfo.names, userInfo.email);
-    this.studentsService.addStudent(userInfo);
+    return this.studentsService.addStudent(userInfo);
   }
 
   @Put(":id")
