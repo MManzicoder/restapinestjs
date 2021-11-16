@@ -10,24 +10,24 @@ export default class StudentController{
   constructor(private readonly studentsService: StudentsService) { }
   
   @Get()
-  public getAll(): Student[]{
+  public getAll(){
     return this.studentsService.getAll();
   }
   @Post()
-  public addStudent(@Body() userInfo: Student): Student {
-    return this.studentsService.addStudent(userInfo.names, userInfo.email);
+  public addStudent(@Body() userInfo){
+    // return this.addStudent(userInfo.names, userInfo.email);
+    this.studentsService.addStudent(userInfo);
   }
 
   @Put(":id")
-  public updateStudent(@Param("id") id: string, @Body() userInfo: Student): Student{
+  public updateStudent(@Param("id") id: string, @Body() userInfo: Student){
     console.log(id);
-    return this.studentsService.editStudent(id, userInfo.names, userInfo.email);
     
   }
 
   @Delete(":id")
-  public deleteStudent(@Param("id") id: string): {message: string, students: Student[]}{
-    return this.studentsService.deleteStudent(id);
+  public deleteStudent(@Param("id") id: string){
+    
   }
   
 }
