@@ -7,18 +7,19 @@ import { StudentModel } from '../schemas/student.model';
 export default class StudentsService{
   students: Student[] = [];
   public getAll(): Student[]{
-    const students = StudentModel.find().exec();
-    console.log(students);
+    // const students = StudentModel.find().exec();
+    // console.log(students);
     return this.students;
   }
   public addStudent(names: string, email: string): Student{
-   
+   return this.students[0]
   }
   public editStudent(id: string, names: string, email: string): Student{
-   
+    return this.students[0];
     
   }
   public deleteStudent(id: string): {message: string, students: Student[]}{
-    
+    return { message: "Nice", students: this.students };
 
+}
 }
