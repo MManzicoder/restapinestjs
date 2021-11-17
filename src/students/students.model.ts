@@ -40,3 +40,25 @@ export class StudentResponse{
 }
 
 export const StudentSchema = SchemaFactory.createForClass(Student);
+
+export interface UserLoginInfo{
+  email: string,
+  password: string
+}
+
+export interface userSignupInfo{
+  names: string,
+  username: string,
+  password: string,
+  passwordComfirm: string
+}
+
+@Schema()
+export class User{
+  @Prop({ required: true, max: 40 })
+  names: string;
+  @Prop({max: 30})
+  username: string;
+  @Prop({min: 6})
+  password: string;
+}
