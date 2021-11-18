@@ -5,6 +5,7 @@ import { MongooseModule, Schema } from '@nestjs/mongoose';
 import { UserSchema, User } from '../students/students.model';
 import { JwtModule } from "@nestjs/jwt";
 import { MailerModule } from "@nestjs-modules/mailer";
+import * as configs from "../../config/config";
 
 @Module({
   imports: [
@@ -12,7 +13,19 @@ import { MailerModule } from "@nestjs-modules/mailer";
     JwtModule.register({
       secret: "lovelymom100percent"
     }),
-    MailerModule.forRoot()
+    MailerModule.forRoot({
+      transport: {
+        host: "smtp.example.com",
+        secure: true,
+        auth: {
+          user: configs.EmailOptions.email,
+          pass: configs.EmailOptions.password
+        }
+       },
+       defaults: {
+        from: `${configs.EmailOptions.email}`,
+      },
+    })
   ],
   controllers: [AuthController],
   providers: [AuthService],
