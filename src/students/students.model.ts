@@ -22,7 +22,7 @@ export class Student{
   @Prop({max: 40})
     names: string;
   @Prop({max: 30})
-    email: string;
+  email: string;
 }
 export class StudentResponse{
   public _id: string;
@@ -63,8 +63,10 @@ export class User{
    username: string;
   @Prop({min: 6})
   password: string;
-  @Prop({default: false})
-  active: Boolean
+  @Prop({ default: false })
+  active: Boolean;
+   @Prop()
+  activationcode: string;
 }
 export type UserDocument = User & Document;
 export const UserSchema = SchemaFactory.createForClass(User);

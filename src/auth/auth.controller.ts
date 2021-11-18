@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, Param } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { Message } from '../util/message';
 import { userSignupInfo, UserLoginInfo } from '../students/students.model';
@@ -14,5 +14,9 @@ export class AuthController{
   @Post("login")
   public loginUser(@Body() user: UserLoginInfo): any{
     return this.authService.loginUser(user);
+  }
+  @Post(":activationcode")
+  public activateUserAccount(@Param("activationcode") code: string) {
+    return this.authService.activateUserAccount;
   }
 }

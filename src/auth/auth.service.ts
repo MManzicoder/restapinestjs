@@ -56,9 +56,32 @@ export class AuthService{
   }
 
  async loginUser(user) {
-    
+    try {
+      const userMatch = await this.userModel.findOne({ email: user.email });
+       if(!userMatch) throw new UnauthorizedException("Invalid credentials!");
+      if (user.password === "") throw new UnauthorizedException("Password required!");
+      const isMatch = await bcrypt.compare(user.password, userMatch.password);
+      if (!isMatch) throw new UnauthorizedException("Invalid credentials!");
+      if (!userMatch.active) throw new UnauthorizedException("You need to activate your account!");
+      const { _id, username, email} = userMatch;
+      const token = this.jwtService.sign({ _id, email, username }, {
+        expiresIn: "7d"
+      })
+      return { token, user: { _id, username, email } };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
-  async sendEmail(user) {
-    
-  }
+
+  async activateUserAccount(code: string) {
+    let user = await this.userModel.findOne({ activationcode: code });
+    if (!user) throw new UnauthorizedException("Invalid code check and try again!");
+    user.active = true;
+    user = await user.save();
+    const { _id, email, username } = user;
+      const token = this.jwtService.sign({ _id, email, username }, {
+        expiresIn: "7d"
+      })
+      return { token, user: { _id, username, email } };
+ }
 }
