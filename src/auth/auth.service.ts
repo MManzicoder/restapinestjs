@@ -6,6 +6,7 @@ import { User, UserDocument } from '../students/students.model';
 import * as bcrypt from "bcrypt";
 import { MailerService } from "@nestjs-modules/mailer";
 import * as configs from "../../config/config";
+import { makeUniqueCode } from '../util/message';
 
 @Injectable()
 export class AuthService{
@@ -26,7 +27,9 @@ export class AuthService{
           username: user.username,
           email: user.email,
           password: hashedPassword
-       })   
+       })
+      const activationcode = makeUniqueCode(30);
+      newUser.activationcode = activationcode;
       const {_id, username, email} = await newUser.save();
       const token = this.jwtService.sign({ _id, username, email }, {
       expiresIn: "7d"
@@ -40,7 +43,7 @@ export class AuthService{
         <html>
            <div style="width: 80%; margin: 0 auto;">
                    <p>Hi ${username}, thank you for creating account on our platform click the link below to verify your acount!</p>
-                   <a href ="http://localhost:3000/verifyaccount" style="color: #fff;  text-decoration:none; margin: 10px 200px; width: 40%; padding: 5px 25px; text-align: center; background: dodgerblue; border-radius: 5px;">Verify your account</a>
+                   <a href ="http://localhost:3000/api/auth/verifyaccount/${activationcode}" style="color: #fff;  text-decoration:none; margin: 10px 200px; width: 40%; padding: 5px 25px; text-align: center; background: dodgerblue; border-radius: 5px;">Verify your account</a>
            </div>
           </html>
         `
@@ -63,6 +66,7 @@ export class AuthService{
       const isMatch = await bcrypt.compare(user.password, userMatch.password);
       if (!isMatch) throw new UnauthorizedException("Invalid credentials!");
       if (!userMatch.active) throw new UnauthorizedException("You need to activate your account!");
+
       const { _id, username, email} = userMatch;
       const token = this.jwtService.sign({ _id, email, username }, {
         expiresIn: "7d"

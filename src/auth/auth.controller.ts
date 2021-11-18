@@ -15,8 +15,8 @@ export class AuthController{
   public loginUser(@Body() user: UserLoginInfo): any{
     return this.authService.loginUser(user);
   }
-  @Post(":activationcode")
+  @Post("verifyaccount/:activationcode")
   public activateUserAccount(@Param("activationcode") code: string) {
-    return this.authService.activateUserAccount;
+    return this.authService.activateUserAccount(code);
   }
 }
