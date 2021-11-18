@@ -3,7 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import { User, UserDocument } from '../students/students.model';
-import bcrypt from "bcrypt";
+import * as bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService{
@@ -12,7 +12,7 @@ export class AuthService{
     private readonly jwtService: JwtService
   ) { }
   async registerUser(user) {
-   const userMatch = await this.userModel.findOne(user.email); 
+    const userMatch = await this.userModel.findOne({ email: user.email });
    if(userMatch) throw new UnauthorizedException("Email already exists");
     if (user.password === "") throw new UnauthorizedException("Password required!");
     if (user.password !== user.comfirmPassword) return new UnauthorizedException("Password don't match!");
