@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { Message } from '../util/message';
 import { userSignupInfo, UserLoginInfo } from '../students/students.model';
 
-@Controller("auth")
+@Controller("api/auth")
 export class AuthController{
   constructor(private readonly authService: AuthService) { }
   @Post("register")

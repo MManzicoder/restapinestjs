@@ -57,8 +57,10 @@ export interface userSignupInfo{
 export class User{
   @Prop({ required: true, max: 40 })
   names: string;
-  @Prop({max: 30})
-  username: string;
+  @Prop({ max: 40 })
+  email: string;
+  @Prop({ max: 30 })
+   username: string;
   @Prop({min: 6})
   password: string;
 }

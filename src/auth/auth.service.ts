@@ -2,25 +2,32 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import {User, UserDocument } from '../students/students.model';
+import { User, UserDocument } from '../students/students.model';
+import bcrypt from "bcrypt";
 
 @Injectable()
 export class AuthService{
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<UserDocument>
-    private readonly jwtService: 
+    @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
+    private readonly jwtService: JwtService
   ) { }
   async registerUser(user) {
    const userMatch = await this.userModel.findOne(user.email); 
    if(userMatch) throw new UnauthorizedException("Email already exists");
-   if(user.password === "") throw new UnauthorizedException("Password required!");
+    if (user.password === "") throw new UnauthorizedException("Password required!");
+    if (user.password !== user.comfirmPassword) return new UnauthorizedException("Password don't match!");
+    const hashedPassword = await bcrypt.hash(user.password, 10);
    const newUser = new this.userModel({
      names: user.names,
      username: user.username,
      email: user.email,
-     password: user.password
+     password: hashedPassword
    })   
-    const data = await newUser.save();
+    const {_id, username, email} = await newUser.save();
+    const token = this.jwtService.sign({ _id, username, email }, {
+      expiresIn: "7d"
+    })
+    return { token, user: { _id, username, email } };
   }
 
  async loginUser(user) {
