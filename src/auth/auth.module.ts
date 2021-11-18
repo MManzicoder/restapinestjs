@@ -11,11 +11,11 @@ import * as configs from "../../config/config";
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
-      secret: "lovelymom100percent"
+      secret: configs.TOKEN_SECRET
     }),
     MailerModule.forRoot({
       transport: {
-        host: "smtp.example.com",
+        service: "gmail",
         secure: true,
         auth: {
           user: configs.EmailOptions.email,
@@ -28,8 +28,7 @@ import * as configs from "../../config/config";
     })
   ],
   controllers: [AuthController],
-  providers: [AuthService],
-  exports: [AuthService]
+  providers: [AuthService]
 })
 
 export default class AuthModule {}
