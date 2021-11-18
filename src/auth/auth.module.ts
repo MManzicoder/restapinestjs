@@ -22,8 +22,7 @@ import * as configs from "../../config/config";
           user: `${configs.EmailOptions.email}`,
           pass: `${configs.EmailOptions.password}`
         }
-        }
-       },
+        },
        defaults: {
         from: `${configs.EmailOptions.email}`,
       },

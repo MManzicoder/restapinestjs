@@ -36,7 +36,7 @@ export class AuthService{
         from: configs.EmailOptions.email,
         subject: `Hi ${username} verify your account`,
         text: `Hi ${username}, thank you for creating account on our platform click the link below to verify your acount!`,
-        html: `<a href ="http://localhost:3000/verifyaccount" style="width: 40%; padding: 15px 10px; background: lightblue; border-radius: 5px;">Verify your account </p>`
+        html: `<a href ="http://localhost:3000/verifyaccount" style="width: 40%; padding: 15px 10px; text-align: center; background: lightblue; border-radius: 5px;">Verify your account </p>`
 
       }
       this.mailerService.sendMail(sendMailOptions)
