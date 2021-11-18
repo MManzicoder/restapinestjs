@@ -12,7 +12,8 @@ export class AuthService{
     private readonly jwtService: JwtService
   ) { }
   async registerUser(user) {
-    const userMatch = await this.userModel.findOne({ email: user.email });
+    try {
+         const userMatch = await this.userModel.findOne({ email: user.email });
    if(userMatch) throw new UnauthorizedException("Email already exists");
     if (user.password === "") throw new UnauthorizedException("Password required!");
     if (user.password !== user.comfirmPassword) return new UnauthorizedException("Password don't match!");
@@ -28,6 +29,9 @@ export class AuthService{
       expiresIn: "7d"
     })
     return { token, user: { _id, username, email } };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
   }
 
  async loginUser(user) {
