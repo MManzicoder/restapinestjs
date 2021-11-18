@@ -62,3 +62,5 @@ export class User{
   @Prop({min: 6})
   password: string;
 }
+export type UserDocument = User & Document;
+export const UserSchema = SchemaFactory.createForClass(User);
