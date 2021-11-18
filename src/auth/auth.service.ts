@@ -35,12 +35,20 @@ export class AuthService{
         to: `${email}`,
         from: configs.EmailOptions.email,
         subject: `Hi ${username} verify your account`,
-        text: `Hi ${username}, thank you for creating account on our platform click the link below to verify your acount!`,
-        html: `<a href ="http://localhost:3000/verifyaccount" style="width: 40%; padding: 15px 10px; text-align: center; background: lightblue; border-radius: 5px;">Verify your account </p>`
-
+        text: ``,
+        html: `
+        <html>
+           <div style="width: 80%; margin: 0 auto;">
+                   <p>Hi ${username}, thank you for creating account on our platform click the link below to verify your acount!</p>
+                   <a href ="http://localhost:3000/verifyaccount" style="color: #fff;  text-decoration:none; margin: 10px 200px; width: 40%; padding: 5px 25px; text-align: center; background: dodgerblue; border-radius: 5px;">Verify your account</a>
+           </div>
+          </html>
+        `
       }
-      this.mailerService.sendMail(sendMailOptions)
-        .then(res => "check your email to verify your account")
+      return this.mailerService.sendMail(sendMailOptions)
+        .then(res => {
+          if (res) return { message: "check your email to verify your account", statusCode: 200 };
+        })
         .catch(err => new UnauthorizedException(err.message));
     } catch (error) {
       throw new UnauthorizedException(error.message);
