@@ -4,16 +4,19 @@ import { AuthService } from './auth.service';
 import { MongooseModule, Schema } from '@nestjs/mongoose';
 import { UserSchema, User } from '../students/students.model';
 import { JwtModule } from "@nestjs/jwt";
+import { MailerModule } from "@nestjs-modules/mailer";
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
     JwtModule.register({
       secret: "lovelymom100percent"
-    })
+    }),
+    MailerModule.forRoot()
   ],
   controllers: [AuthController],
-  providers: [AuthService]
+  providers: [AuthService],
+  exports: [AuthService]
 })
 
 export default class AuthModule {}
