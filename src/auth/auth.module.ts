@@ -15,11 +15,13 @@ import * as configs from "../../config/config";
     }),
     MailerModule.forRoot({
       transport: {
-        service: "gmail",
+        port: 465,
+        host: "smtp.gmail.com",
         secure: true,
         auth: {
-          user: configs.EmailOptions.email,
-          pass: configs.EmailOptions.password
+          user: `${configs.EmailOptions.email}`,
+          pass: `${configs.EmailOptions.password}`
+        }
         }
        },
        defaults: {
