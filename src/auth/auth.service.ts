@@ -2,11 +2,12 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { User, UserDocument } from '../students/students.model';
+import { User,UserLoginInfo, UserDocument } from '../students/students.model';
 import * as bcrypt from "bcrypt";
 import { MailerService } from "@nestjs-modules/mailer";
 import * as configs from "../../config/config";
 import { makeUniqueCode } from '../util/message';
+
 
 @Injectable()
 export class AuthService{
@@ -90,10 +91,11 @@ export class AuthService{
       return { token, user: { _id, username, email } };
   }
 
-  async getPasswordResetLink(userEmail) {
+  async getPasswordResetLink(userEmail: UserLoginInfo) {
 try {
-      let user = await this.userModel.findOne({ email: userEmail });
-    if (!user) throw new UnauthorizedException("An error occured!");
+      let user = await this.userModel.findOne({ email: userEmail.email});
+  if (!user) throw new UnauthorizedException("An error occured!");
+  if (!user.active) throw new UnauthorizedException("You need to comfirm your email!");
     const tokenResetSecret = makeUniqueCode(30);
     user.passwordToken = tokenResetSecret;
     const { username, email } = await user.save();

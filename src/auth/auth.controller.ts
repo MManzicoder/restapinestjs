@@ -2,7 +2,8 @@ import { Body, Controller, Post, Param } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { Message } from '../util/message';
 import { userSignupInfo, UserLoginInfo } from '../students/students.model';
-import { UserLoginInfo } from '../../dist/src/students/students.model';
+
+
 
 @Controller("api/auth")
 export class AuthController{
@@ -21,8 +22,9 @@ export class AuthController{
     return this.authService.activateUserAccount(code);
   }
   @Post("resetpassword")
-  public getPasswordResetLink(@Body() user) {
-    return this.getPasswordResetLink(user.email);
+  public getPasswordResetLink(@Body() user: UserLoginInfo) :any{
+   
+    return this.getPasswordResetLink(user);
   }
   @Post("resetpassword/:passcode")
   public resetPassword(@Param("passcode") code, @Body() user) {
