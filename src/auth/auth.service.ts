@@ -90,9 +90,9 @@ export class AuthService{
       return { token, user: { _id, username, email } };
   }
 
-  async getPasswordResetLink(userDet) {
+  async getPasswordResetLink(userEmail) {
 try {
-      let user = await this.userModel.findOne({ email: userDet.email });
+      let user = await this.userModel.findOne({ email: userEmail });
     if (!user) throw new UnauthorizedException("An error occured!");
     const tokenResetSecret = makeUniqueCode(30);
     user.passwordToken = tokenResetSecret;
