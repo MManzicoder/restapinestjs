@@ -99,21 +99,21 @@ try {
     const { username, email } = await user.save();
 const sendMailOptions = {
         to: `${email}`,
-        from: configs.EmailOptions.email,
-        subject: `Hi ${username} verify your account`,
+        from: "rdevTech",
+        subject: `Reset your rdevTech account password`,
         text: ``,
         html: `
         <html>
            <div style="width: 80%; margin: 0 auto;">
-                   <p>Hi ${username}, thank you for creating account on our platform click the link below to verify your acount!</p>
-                   <a href ="http://localhost:3000/api/auth/verifyaccount/${activationcode}" style="color: #fff;  text-decoration:none; margin: 10px 200px; width: 40%; padding: 5px 25px; text-align: center; background: dodgerblue; border-radius: 5px;">Verify your account</a>
+                   <p>Hi ${username}, you asked to change your password for your rdevTech acount!</p>
+                   <a href ="http://localhost:3000/api/auth/resetpassword/${tokenResetSecret}" style="color: #fff;  text-decoration:none; margin: 10px 200px; width: 40%; padding: 5px 25px; text-align: center; background: dodgerblue; border-radius: 5px;">Rest Your Account</a>
            </div>
           </html>
         `
       }
       return this.mailerService.sendMail(sendMailOptions)
         .then(res => {
-          if (res) return { message: "check your email to verify your account", statusCode: 200 };
+          if (res) return { message: "check your email to reset your password", statusCode: 200 };
         })
         .catch(err => new UnauthorizedException(err.message));
  
