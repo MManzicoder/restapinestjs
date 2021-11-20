@@ -94,14 +94,14 @@ export class AuthService{
   async getPasswordResetLink(userEmail: UserLoginInfo) {
 try {
       let user = await this.userModel.findOne({ email: userEmail.email});
-  if (!user) throw new UnauthorizedException("An error occured!");
+  if (!user) throw new UnauthorizedException("Not found!");
   if (!user.active) throw new UnauthorizedException("You need to comfirm your email!");
     const tokenResetSecret = makeUniqueCode(30);
     user.passwordToken = tokenResetSecret;
     const { username, email } = await user.save();
 const sendMailOptions = {
         to: `${email}`,
-        from: "rdevTech",
+        from: configs.EmailOptions.email,
         subject: `Reset your rdevTech account password`,
         text: ``,
         html: `
@@ -117,10 +117,10 @@ const sendMailOptions = {
         .then(res => {
           if (res) return { message: "check your email to reset your password", statusCode: 200 };
         })
-        .catch(err => new UnauthorizedException(err.message));
+        .catch(err =>  new UnauthorizedException(err.message));
  
 } catch (error) {
-  throw new Error(error.message);
+  throw new UnauthorizedException(error.message);
 } 
   }
   async resetPassword(code: string, password) {

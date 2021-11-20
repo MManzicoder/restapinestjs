@@ -28,6 +28,6 @@ export class AuthController{
   }
   @Post("resetpassword/:passcode")
   public resetPassword(@Param("passcode") code, @Body() user) {
-   return this.authService.resetPassword(code, user);
+   return this.authService.resetPassword(code, user.password);
   }
 }
