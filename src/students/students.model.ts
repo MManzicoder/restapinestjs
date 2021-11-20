@@ -67,6 +67,8 @@ export class User{
   active: Boolean;
    @Prop()
   activationcode: string;
+  @Prop()
+  passwordToken: string;
 }
 export type UserDocument = User & Document;
 export const UserSchema = SchemaFactory.createForClass(User);

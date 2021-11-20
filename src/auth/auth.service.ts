@@ -81,11 +81,26 @@ export class AuthService{
     let user = await this.userModel.findOne({ activationcode: code });
     if (!user) throw new UnauthorizedException("Invalid code check and try again!");
     user.active = true;
+    user.activationcode = undefined;
     user = await user.save();
     const { _id, email, username } = user;
       const token = this.jwtService.sign({ _id, email, username }, {
         expiresIn: "7d"
       })
       return { token, user: { _id, username, email } };
- }
+  }
+  async getPasswordResetLink(userDet) {
+    const user = await this.userModel.findOne({ email: userDet.email });
+    if (!user) throw new UnauthorizedException("An error occured!");
+    const tokenResetSecret = 
+  }
+  async resetPassword(code: string, password) {
+    const user = await this.userModel.findOne({ passwordToken: code });
+    if (!user) throw new UnauthorizedException("Error occured!");
+    let hashedpassword = await bcrypt.hash(password, 10);
+    user.password = hashedpassword;
+    user.passwordToken = undefined;
+    await user.save();
+    return { message: "password changed successfully!" };
+  }
 }

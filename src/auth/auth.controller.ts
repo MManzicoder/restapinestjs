@@ -19,4 +19,8 @@ export class AuthController{
   public activateUserAccount(@Param("activationcode") code: string) {
     return this.authService.activateUserAccount(code);
   }
+  @Post("resetpassword/:passcode")
+  public resetPassword(@Param("passcode") code, @Body() user) {
+   return this.authService.resetPassword(code, user);
+  }
 }
