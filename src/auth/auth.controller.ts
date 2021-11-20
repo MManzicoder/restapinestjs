@@ -24,7 +24,7 @@ export class AuthController{
   @Post("resetpassword")
   public getPasswordResetLink(@Body() user: UserLoginInfo) :any{
    
-    return this.getPasswordResetLink(user);
+    return this.authService.getPasswordResetLink(user);
   }
   @Post("resetpassword/:passcode")
   public resetPassword(@Param("passcode") code, @Body() user) {
