@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Req } from "@nestjs/common";
 import { Student } from './students.model';
 import StudentsService from './students.service';
 
@@ -10,8 +10,8 @@ export default class StudentController{
   constructor(private readonly studentsService: StudentsService) { }
   
   @Get()
-  public getAll(){
-    return this.studentsService.getAll();
+  public getAll(@Req() req){
+    return this.studentsService.getAll(req);
   }
   @Post()
   public addStudent(@Body() userInfo){

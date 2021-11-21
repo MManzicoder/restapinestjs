@@ -2,7 +2,7 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { User, UserLoginInfo, UserDocument, Student, StudentDocument } from '../students/students.model';
+import { User, UserLoginInfo, UserDocument} from '../students/students.model';
 import * as bcrypt from "bcrypt";
 import { MailerService } from "@nestjs-modules/mailer";
 import * as configs from "../../config/config";
@@ -15,7 +15,6 @@ export class AuthService{
     @InjectModel(User.name) private readonly userModel: Model<UserDocument>,
     private readonly jwtService: JwtService,
     private readonly mailerService: MailerService,
-    @InjectModel(Student.name) private readonly studentModel: Model<StudentDocument>
   ) { }
   async registerUser(user) {
     try {
@@ -133,12 +132,12 @@ const sendMailOptions = {
     await user.save();
     return { message: "password changed successfully!" };
   }
-  async checkAuth(req, next) {
+  async checkAuth(req) {
 try {
       const { _id } = this.jwtService.verify(req.headers.bearer);
       const user = await this.userModel.findById(_id);
       if (!user) throw new UnauthorizedException("unauthorized");
-  next();
+  return { message: "Authorized" };
 } catch (error) {
   return new Error(error.message)
 }

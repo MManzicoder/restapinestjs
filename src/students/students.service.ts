@@ -1,13 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from "@nestjs/mongoose"
-import { Student, StudentDocument, StudentResponse } from './students.model';
+import { Student, StudentDocument, StudentResponse, UserDocument, User } from './students.model';
 import { Model } from 'mongoose';
+import { JwtService } from '@nestjs/jwt';
 
 
 @Injectable()
 export default class StudentsService{
-  constructor(@InjectModel(Student.name) private readonly studentModel: Model<StudentDocument>) { }
-  async getAll(){
+  constructor(@InjectModel(Student.name) private readonly studentModel: Model<StudentDocument>,
+    private readonly jwtService: JwtService,
+  @InjectModel(User.name) private readonly userModel: Model<UserDocument>
+  ) { }
+  async getAll(req) {
+    
     let students = await this.studentModel.find().exec();
     return students;
   }
@@ -29,5 +34,13 @@ export default class StudentsService{
     if (!student) return { error: "Student with id " + id + " not found" };
     return { message: "Deleted record successfully!" };
 
+  }
+  async checkAuth(req) {
+      const { _id } = this.jwtService.verify(req.headers.bearer);
+      const user = await this.userModel.findById(_id);
+      if (!user) throw new UnauthorizedException("unauthorized");
+     
+} 
 }
-}
+
+
