@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Param } from "@nestjs/common";
+import { Body, Controller, Post, Param, Get, Req } from "@nestjs/common";
 import { AuthService } from './auth.service';
 import { Message } from '../util/message';
 import { userSignupInfo, UserLoginInfo } from '../students/students.model';
@@ -29,5 +29,9 @@ export class AuthController{
   @Post("resetpassword/:passcode")
   public resetPassword(@Param("passcode") code, @Body() user) {
    return this.authService.resetPassword(code, user.password);
+  }
+  @Get("students")
+  public checkAuth(@Req() req) { 
+    return this.authService.checkAuth(req);
   }
 }
