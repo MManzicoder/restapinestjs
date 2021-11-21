@@ -3,7 +3,7 @@ import { Student } from './students.model';
 import StudentsService from './students.service';
 
 
-@Controller("students")
+@Controller("api/students")
 
 export default class StudentController{
 

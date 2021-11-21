@@ -12,9 +12,11 @@ export default class StudentsService{
   @InjectModel(User.name) private readonly userModel: Model<UserDocument>
   ) { }
   async getAll(req) {
-    
-    let students = await this.studentModel.find().exec();
-    return students;
+    if (this.checkAuth(req)) {
+      let students = await this.studentModel.find().exec();
+      return students;
+    }
+    return { error: "Invalid token" };
   }
   async addStudent(userInfo){
     const newStudent = new this.studentModel({
@@ -39,7 +41,7 @@ export default class StudentsService{
       const { _id } = this.jwtService.verify(req.headers.bearer);
       const user = await this.userModel.findById(_id);
       if (!user) throw new UnauthorizedException("unauthorized");
-     
+    return true;
 } 
 }
 
